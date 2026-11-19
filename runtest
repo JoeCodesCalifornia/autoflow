@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Bootstrap a local virtualenv if needed and run the Autoflow test suite.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$ROOT"
+
+PYTHON="${PYTHON:-python3}"
+VENV="${VENV:-$ROOT/.venv}"
+
+if [[ ! -x "$VENV/bin/python" ]]; then
+  echo "runtest: creating virtualenv at $VENV"
+  "$PYTHON" -m venv "$VENV"
+fi
+
+# shellcheck source=/dev/null
+source "$VENV/bin/activate"
+
+if ! python -c "import autoflow, pytest, pytest_cov, xdist" >/dev/null 2>&1; then
+  echo "runtest: installing autoflow and dev dependencies"
+  python -m pip install --upgrade pip >/dev/null
+  python -m pip install -e ".[dev]"
+fi
+
+exec python -m autoflow runtest --coverage --html-report "$@"
