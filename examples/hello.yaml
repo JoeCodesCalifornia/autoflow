@@ -1,0 +1,18 @@
+name: hello
+description: A tiny two-step pipeline used in the quickstart.
+version: "1.0"
+max_concurrency: 2
+vars:
+  GREETING: hello from autoflow
+tasks:
+  - name: greet
+    type: shell
+    description: Print a greeting to stdout.
+    params:
+      command: echo "${GREETING}"
+  - name: save
+    type: files.write
+    depends_on: [greet]
+    params:
+      path: out/hello.txt
+      content: "${GREETING}\n"

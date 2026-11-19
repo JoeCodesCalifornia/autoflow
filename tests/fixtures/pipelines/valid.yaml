@@ -1,0 +1,17 @@
+name: fixture-valid
+version: "1.0"
+max_concurrency: 3
+vars:
+  MSG: ok
+tasks:
+  - name: one
+    type: shell
+    params:
+      command: echo "${MSG}"
+  - name: two
+    type: files.write
+    depends_on:
+      - one
+    params:
+      path: out.txt
+      content: "${MSG}"

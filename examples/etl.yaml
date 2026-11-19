@@ -1,0 +1,31 @@
+name: etl
+description: Copy a source file, transform it with a shell command, then tidy up.
+version: "1.0"
+max_concurrency: 2
+vars:
+  SOURCE: input.txt
+  WORK: work/copied.txt
+  OUTPUT: work/upper.txt
+tasks:
+  - name: prepare
+    type: files.mkdir
+    params:
+      path: work
+  - name: copy
+    type: files.copy
+    depends_on: [prepare]
+    params:
+      src: "${SOURCE}"
+      dest: "${WORK}"
+  - name: transform
+    type: shell
+    depends_on: [copy]
+    retries: 1
+    timeout: 15
+    params:
+      command: "tr '[:lower:]' '[:upper:]' < ${WORK} > ${OUTPUT}"
+  - name: read_result
+    type: files.read
+    depends_on: [transform]
+    params:
+      path: "${OUTPUT}"

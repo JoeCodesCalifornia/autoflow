@@ -1,0 +1,14 @@
+{
+  "name": "hello-json",
+  "description": "The hello pipeline, expressed as JSON.",
+  "max_concurrency": 2,
+  "tasks": [
+    {
+      "name": "greet",
+      "type": "shell",
+      "params": {
+        "command": "echo hello from json"
+      }
+    }
+  ]
+}

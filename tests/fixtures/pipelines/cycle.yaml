@@ -1,0 +1,12 @@
+name: fixture-cycle
+tasks:
+  - name: a
+    type: shell
+    depends_on: [b]
+    params:
+      command: echo a
+  - name: b
+    type: shell
+    depends_on: [a]
+    params:
+      command: echo b

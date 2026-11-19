@@ -1,0 +1,10 @@
+{
+  "name": "fixture-json",
+  "tasks": [
+    {
+      "name": "echo",
+      "type": "shell",
+      "params": { "command": "echo json" }
+    }
+  ]
+}

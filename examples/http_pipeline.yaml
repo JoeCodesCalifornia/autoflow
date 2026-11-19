@@ -1,0 +1,23 @@
+name: http_sample
+description: Fetch a URL and store the response body. Override URL with --var.
+version: "1.0"
+max_concurrency: 1
+vars:
+  URL: https://example.com
+  DEST: out/example.html
+tasks:
+  - name: fetch
+    type: http.request
+    timeout: 30
+    retries: 2
+    backoff: 0.5
+    params:
+      url: "${URL}"
+      method: GET
+      dest: "${DEST}"
+      expected_status: 200
+  - name: stat
+    type: shell
+    depends_on: [fetch]
+    params:
+      command: "wc -c ${DEST}"
